@@ -97,7 +97,7 @@ class Splitter {
 	 * @return string The menu items.
 	 */
 	public function splice_menu_segments( $items, $args ) {
-		// Get the segments option.
+		// Get the segments and the slug.
 		$segments = get_option( 'pdms_segments', array() );
 		$slug     = $args->theme_location;
 

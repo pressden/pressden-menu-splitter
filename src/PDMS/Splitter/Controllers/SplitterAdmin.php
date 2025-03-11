@@ -91,6 +91,15 @@ class SplitterAdmin {
 	 * Add settings sections.
 	 */
 	public function add_sections() {
+		// Get the page.
+		$page = ( isset( $_REQUEST['page'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) : null;
+
+		// Exit early condition.
+		if ( PDMS_PREFIX !== $page ) {
+			return;
+		}
+
+		// Get the slug and nonce.
 		$slug  = ( isset( $_REQUEST['slug'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['slug'] ) ) : null;
 		$nonce = ( isset( $_REQUEST['pdms_nonce'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['pdms_nonce'] ) ) : null;
 
