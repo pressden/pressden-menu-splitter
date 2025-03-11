@@ -40,7 +40,8 @@ class SplitterHooks {
 
 		// Universal hooks.
 		add_action( 'after_setup_theme', array( $this->splitter, 'register_menu_segments' ), 1000, 1 );
-		add_filter( 'wp_nav_menu_items', array( $this->splitter, 'splice_menu_segments' ), 10, 2 );
+		//add_filter( 'wp_nav_menu_items', array( $this->splitter, 'splice_menu_segments' ), 10, 2 );
+		add_filter( 'wp_get_nav_menu_items', array( $this->splitter, 'splice_menu_segments_variation' ), 10, 3 );
 
 		// Backend hooks.
 		if ( is_admin() && $this->splitter_admin ) {

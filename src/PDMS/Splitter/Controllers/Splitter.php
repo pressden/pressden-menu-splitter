@@ -131,4 +131,56 @@ class Splitter {
 
 		return $items;
 	}
+
+	/**
+	 * Splice the segments together.
+	 *
+	 * @param array  $items The menu items.
+	 * @param object $menu  The menu object.
+	 * @param array  $args  The menu arguments.
+	 *
+	 * @return array The menu items.
+	 */
+	public function splice_menu_segments_variation( $items, $menu, $args ) {
+		$segments  = get_option( 'pdms_segments', array() );
+		$locations = is_array( get_nav_menu_locations() ) ? get_nav_menu_locations() : array();
+		$slug      = array_search( $menu->term_id, $locations );
+
+		// Exit early condition.
+		if ( ! isset( $segments[ $slug ] ) ) {
+			return $items;
+		}
+
+		$segment_args = $segments[ $slug ];
+
+		// BEGIN: Splice the menus back together.
+		$splice_args = array(
+			'container'       => false,
+			'container_class' => null,
+			'container_id'    => null,
+			'menu_class'      => null,
+			'menu_id'         => null,
+			'echo'            => 0,
+			'fallback_cb'     => null,
+			'items_wrap'      => '%3$s',
+		);
+
+		for ( $i = 1; $i <= $segment_args['segment-count']; $i++ ) {
+			// Set the theme location dynamically.
+			$splice_args['theme_location'] = $slug . '-pdms-' . $i;
+
+			$segment_items = wp_get_nav_menu_items( $locations[ $slug . '-pdms-' . $i ], $splice_args );
+
+			// Append the segment to the existing items.
+			$items = array_merge( $items, $segment_items );
+		}
+
+		// Reset the menu order to reflect the spliced menu segments.
+		foreach ( $items as $key => $item ) {
+			$items[ $key ]->menu_order = $key + 1;
+		}
+		// END: Splice the menus back together.
+
+		return $items;
+	}
 }
